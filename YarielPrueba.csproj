@@ -190,6 +190,10 @@
       <DependentUpon>DBModels.edmx</DependentUpon>
       <LastGenOutput>DBModels.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\angular-route.js" />
+    <Content Include="Scripts\angular-route.min.js" />
+    <Content Include="Scripts\angular.js" />
+    <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
