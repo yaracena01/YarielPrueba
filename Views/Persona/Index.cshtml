@@ -1,0 +1,245 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+@using (Html.BeginForm("Index", "Persona", FormMethod.Post, new { onsubmit = "return SubmitForm2(this)" }))
+{
+    <div class="table-title">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2>CRUD <b>Persona</b></h2>
+            </div>
+            <div class="col-sm-6">
+                <a class="btn btn-success btn-add-persona"  onclick="PopupForm('@Url.Action("AddOrEdit", "Persona")')"><i class="fa fa-plus-circle" aria-hidden="true"></i><span>Agregar una nueva persona</span></a>
+                <button type="submit" value="Eliminar múltiples" style="margin-right:10px;font-size: 14.9px;" class="btn btn-sm btn-danger btn-add-persona"><i class="fa fa-minus-circle" aria-hidden="true"></i>Eliminar múltiples</button>
+            </div>
+        </div>
+    </div>
+    <table id="personaTable" class="table table-striped table-hover" style="width:100%">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="checkBoxAll" class="custom-checkbox" /></th>
+                <th>Nombre</th>
+                <th>Fecha de Nacimiento</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+    </table>
+}
+    <div class="modal fade" id="myModal" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="opacity: 1;color: #fff;" title="Cerrar ventana" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Some text in the modal.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    @section scripts{
+        <script src="//cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap.min.js"></script>
+
+        <script>
+        var dataTable, numbers = "0123456789";
+        $(document).ready(function () {
+           dataTable = $("#personaTable").DataTable({
+                "ajax": {
+                    "url": "/Persona/GetData",
+                    "type": "GET",
+                    "datatype": "json"
+               },
+               buttons: [
+                   'selectAll',
+                   'selectNone'
+               ],
+               "columns": [
+                    {
+                        "data": "ID", "width": "50px", "render": function (data) {
+                            return '<input type="checkbox" class="chkCheckBoxId" name="ID" value="'+data+'">';
+                        },
+                        "orderable": false,
+                        "width" : "50px"
+                    },
+                    { "data": "Nombre", "autoWidth": true },
+                    { "data": "FechaDeNacimiento", "autoWidth": true },
+                    {
+                        "data": "ID", "width": "50px", "render": function (data) {
+                            return "<a class='btn btn-warning btn-sm' title='Editar' onclick=PopupForm('@Url.Action("AddOrEdit","Persona")/" + data + "')><i class='fa fa-pencil' aria-hidden='true'></i></a> <a title='Eliminar' style='margin-left:5px' onclick='Delete(" + data + ")' class='btn btn-danger btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></a>";
+                        },
+                        "orderable": false,
+                        "width" : "140px"
+                    }
+
+               ],
+               columnDefs: [{
+                   targets: 2, render: function (data) {
+                       return moment(data).format('DD/MM/YYYY');
+                   }
+               }],
+               "order": [[1, "asc"]],
+               "lengthMenu": [5, 10, 25, 50, 75, 100],
+               "oLanguage": {
+                   "sLengthMenu": "Mostrar _MENU_ registros",
+                   "sEmptyTable": "No hay datos disponibles en la tabla",
+                   "sInfo": "Mostrando _START_ to _END_ of _TOTAL_ registros",
+                   "sInfoEmpty": "Mostrando 0 to 0 of 0 registros",
+                   "oPaginate": {
+                       "sFirst": "Primero",
+                       "sLast": "Último",
+                       "sNext": "Siguiente",
+                       "sPrevious": "Anterior"
+                   },
+               }
+           });
+            $('#checkBoxAll').click(function () {
+                if ($(this).is(":checked")) {
+                    $(".chkCheckBoxId").prop("checked", true)
+                }
+                else {
+                    $(".chkCheckBoxId").prop("checked", false)
+                }
+            });
+        });
+
+        function hasNumber(texto) {
+            for (i = 0; i < texto.length; i++) {
+                if (numbers.indexOf(texto.charAt(i), 0) != -1) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        function PopupForm(url) {
+            var title = hasNumber(url) ? "Editar Persona" : "Agregar Persona";
+            $.get(url)
+                .done(function (response) {
+                    $('.modal-title').html(title);
+                    $('.modal-body').html(response);
+                    $('#myModal').modal('show');
+                });
+        }
+
+        function SubmitForm(form) {
+            $.validator.unobtrusive.parse(form);
+            console.log($(form).valid());
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            $('#myModal').modal('toggle');
+                            dataTable.ajax.reload();
+                            toastr.success(data.message, '', {
+                                "positionClass": "toast-bottom-right",
+                                "showDuration": "1000",
+                                "hideDuration": "1000",
+                                "timeOut": "5000",
+                                "extendedTimeOut": "1000",
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
+                            });
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+        function SubmitForm2(form) {
+            if ($(".chkCheckBoxId").is(":checked")) {
+                swal({
+                    title: "Eliminar múltiples",
+                    text: "¿Esta seguro de realizar esta acción?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "POST",
+                            url: form.action,
+                            data: $(form).serialize(),
+                            success: function (data) {
+                                if (data.success) {
+                                    $("#checkBoxAll").prop("checked", false);
+                                    dataTable.ajax.reload();
+                                    toastr.error(data.message, '', {
+                                        "positionClass": "toast-bottom-right",
+                                        "showDuration": "1000",
+                                        "hideDuration": "1000",
+                                        "timeOut": "5000",
+                                        "extendedTimeOut": "1000",
+                                        "showEasing": "swing",
+                                        "hideEasing": "linear",
+                                        "showMethod": "fadeIn",
+                                        "hideMethod": "fadeOut"
+                                    });
+                                } else {
+                                    swal({
+                                        title: "Alerta",
+                                        text: "Debe seleccionar un registro",
+                                        icon: "warning",
+                                        dangerMode: true
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            } else {
+                swal({
+                    title: "Alerta",
+                    text: "Debe seleccionar un registro",
+                    icon: "warning",
+                    dangerMode: true
+                });
+            }
+            return false;
+        }
+
+        function Delete(id) {
+            swal({
+                title: "Eliminar",
+                text: "¿Esta seguro de realizar esta acción?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                         type: "POST",
+                         url: '@Url.Action("Delete","Persona")/' + id,
+                         success: function (data) {
+                             if (data.success) {
+                                 dataTable.ajax.reload();
+                                 toastr.error(data.message, '', {
+                                     "positionClass": "toast-bottom-right",
+                                     "showDuration": "1000",
+                                     "hideDuration": "1000",
+                                     "timeOut": "5000",
+                                     "extendedTimeOut": "1000",
+                                     "showEasing": "swing",
+                                     "hideEasing": "linear",
+                                     "showMethod": "fadeIn",
+                                     "hideMethod": "fadeOut"
+                                 });
+                             }
+                         }
+                      });
+                }
+            });
+        }
+
+        </script>
+    }
