@@ -1,8 +1,5 @@
 ﻿
-@{
-    ViewBag.Title = "Index";
-}
-@using (Html.BeginForm("Index", "Persona", FormMethod.Post, new { onsubmit = "return SubmitForm2(this)" }))
+@using (Html.BeginForm("Index", "Persona", FormMethod.Post, new { onsubmit = "return DeleteMultiple(this)" }))
 {
     <div class="table-title">
         <div class="row">
@@ -10,8 +7,8 @@
                 <h2>CRUD <b>Persona</b></h2>
             </div>
             <div class="col-sm-6">
-                <a class="btn btn-success btn-add-persona" onclick="PopupForm('@Url.Action("AddOrEdit", "Persona")')"><i class="fa fa-plus-circle" aria-hidden="true"></i><span>Agregar una nueva persona</span></a>
-                <button type="submit" value="Eliminar múltiples" style="margin-right:10px;font-size: 14.9px;" class="btn btn-sm btn-danger btn-add-persona"><i class="fa fa-minus-circle" aria-hidden="true"></i>Eliminar múltiples</button>
+                <a class="btn btn-success btn-add-persona" onclick="PopupForm('@Url.Action("AddOrEdit", "Persona")')"><i class="fa fa-plus-circle" aria-hidden="true"></i><span class="mb-hide">Agregar una nueva persona</span></a>
+                <button type="submit" value="Eliminar múltiples" style="margin-right:10px;font-size: 14.9px;" class="btn btn-sm btn-danger btn-add-persona"><i class="fa fa-minus-circle" aria-hidden="true"></i><span class="mb-hide">Eliminar múltiples</span></button>
             </div>
         </div>
     </div>
@@ -26,7 +23,7 @@
         </thead>
     </table>
 }
-<div class="modal fade" id="myModal" role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -40,16 +37,18 @@
     </div>
 </div>
 
-<link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap.min.css" rel="stylesheet" />
-<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="~/Content/dataTables.bootstrap.min.css" rel="stylesheet" />
 
 @section scripts{
-    <script src="//cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap.min.js"></script>
-    <script src="//cdn.datatables.net/plug-ins/1.10.11/sorting/date-eu.js" type="text/javascript"></script>
+
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/date-eu.js"></script>
 
     <script>
         var dataTable, numbers = "0123456789";
+
+        //inicio - implementacion de datatable
         $(document).ready(function () {
            dataTable = $("#personaTable").DataTable({
                 "ajax": {
@@ -61,6 +60,7 @@
                    'selectAll',
                    'selectNone'
                ],
+               //inicio - definiendo las columnas de la tabla
                "columns": [
                     {
                         "data": "ID", "width": "50px", "render": function (data) {
@@ -70,23 +70,23 @@
                         "width" : "50px"
                     },
                     { "data": "Nombre", "autoWidth": true },
-                    { "data": "FechaDeNacimiento", "autoWidth": true },
+                    { "data": "FechaDeNacimiento", "type": "date-eu", "autoWidth": true, "render": function (data) {
+                             return moment(data).format('DD/MM/YYYY');
+                        }
+                    },
                     {
-                        "data": "ID", "width": "50px", "render": function (data) {
-                            return "<a class='btn btn-warning btn-sm' title='Editar' onclick=PopupForm('@Url.Action("AddOrEdit","Persona")/" + data + "')><i class='fa fa-pencil' aria-hidden='true'></i></a> <a title='Eliminar' style='margin-left:5px' onclick='Delete(" + data + ")' class='btn btn-danger btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></a>";
+                        "data": "ID", "width": "50px", "className": 'dt-body-center', "render": function (data) {
+                            return "<a class='btn btn-warning btn-sm' title='Editar' onclick=PopupForm('@Url.Action("AddOrEdit","Persona")/" + data + "')><i class='fa fa-pencil' aria-hidden='true'></i></a> <a title='Eliminar' onclick='Delete(" + data + ")' class='action-delete btn btn-danger btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></a>";
                         },
                         "orderable": false,
                         "width" : "140px"
                     }
 
                ],
-               columnDefs: [{
-                   type: "date-eu", targets: 2, render: function (data) {
-                       return moment(data).format('DD/MM/YYYY');
-                   }
-               }],
+               //fin - definiendo las columnas de la tabla
                "order": [[1, "asc"]],
                "lengthMenu": [5, 10, 25, 50, 75, 100],
+               //inicio - traduccion de los texto del datatable
                "oLanguage": {
                    "sLengthMenu": "Mostrar _MENU_ registros",
                    "sEmptyTable": "No hay datos disponibles en la tabla",
@@ -99,6 +99,7 @@
                        "sPrevious": "Anterior"
                    },
                }
+               //fin - traduccion de los texto del datatable
            });
             $('#checkBoxAll').click(function () {
                 if ($(this).is(":checked")) {
@@ -109,6 +110,7 @@
                 }
             });
         });
+        //fin - implementacion de datatable
 
         function hasNumber(texto) {
             for (i = 0; i < texto.length; i++) {
@@ -118,16 +120,26 @@
             }
             return false;
         }
+
+        //inicio - funcion para dibujar formulario dentro en un modal
         function PopupForm(url) {
             var title = hasNumber(url) ? "Editar Persona" : "Agregar Persona";
             $.get(url)
                 .done(function (response) {
                     $('.modal-title').html(title);
                     $('.modal-body').html(response);
-                    $('#myModal').modal('show');
+                    $('#myModal').modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    $("#myModal").on('shown.bs.modal', function () {
+                        $(this).find('#Nombre').focus();
+                    });
                 });
         }
+        //fin - funcion para dibujar formulario dentro en un modal
 
+        //inicio - funcion para validar y guardar los datos del formulario
         function SubmitForm(form) {
             $.validator.unobtrusive.parse(form);
             if ($(form).valid()) {
@@ -156,7 +168,10 @@
             }
             return false;
         }
-        function SubmitForm2(form) {
+        //inicio - funcion para validar y guardar los datos del formulario
+
+        //inicio - funcion para eliminar multiples registros de la tabla
+        function DeleteMultiple(form) {
             if ($(".chkCheckBoxId").is(":checked")) {
                 swal({
                     title: "Eliminar múltiples",
@@ -207,6 +222,7 @@
             }
             return false;
         }
+         //fin - funcion para eliminar multiples registros de la tabla
 
         function Delete(id) {
             swal({

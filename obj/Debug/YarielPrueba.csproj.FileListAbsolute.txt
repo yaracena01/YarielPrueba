@@ -80,4 +80,3 @@ C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\obj\Debug\YarielPrueba.csp
 C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\obj\Debug\YarielPrueba.csproj.CopyComplete
 C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\obj\Debug\YarielPrueba.dll
 C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\obj\Debug\YarielPrueba.pdb
-C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\obj\Debug\YarielPrueba.csprojAssemblyReference.cache

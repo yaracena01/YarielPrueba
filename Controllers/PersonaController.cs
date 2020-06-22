@@ -8,9 +8,8 @@ using YarielPrueba.Models;
 
 namespace YarielPrueba.Controllers
 {
-    public class PersonaController : Controller
-    {
-     
+    public class PersonaController : Controller 
+    {  
         public ActionResult Index()
         {
             return View();

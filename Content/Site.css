@@ -1,5 +1,4 @@
 ﻿body {
-    /*padding-top: 50px;*/
     padding-bottom: 20px;
     font-family: Varela Round, sans-serif !important;
 }
@@ -99,8 +98,32 @@ label {
     font-size: 16px;
     margin: 0 5px;
 }
-.table-title .row {
-    /*background: lightblue;
-    border-radius: 9px;
-    margin-bottom: 9px;*/
+.dt-body-center{
+    text-align:center;
+}
+.action-delete {
+    margin-left: 5px
+}
+/*end form style*/
+@media (max-width: 415px) {
+    .dataTables_length, div.dataTables_wrapper div.dataTables_filter {
+        text-align: left !important;
+    }
+    .mb-hide{
+        display:none;
+    }
+    .action-delete {
+        margin-left: 0px;
+    }
+}
+
+@media (min-width: 992px) {
+
+}
+
+@media (min-width: 1200px) {
+
+}
+
+@media (min-width: 1600px) {
 }
