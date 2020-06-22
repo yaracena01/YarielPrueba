@@ -8,15 +8,15 @@
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Content/toastr.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.css" />
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="~/Content/fontValera.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - En Banreservas se escucha mi voz</p>
+            <p>&copy; @DateTime.Now.Year - Banreservas el banco de los dominicanos</p>
         </footer>
     </div>
     <script src="~/Scripts/jquery-3.4.1.min.js"></script>
@@ -26,7 +26,6 @@
     <script src="~/scripts/moment.min.js"></script>
     <script src="~/scripts/toastr.min.js"></script>
     <script src="~/scripts/bootstrap-datetimepicker.js"></script>
-    <script src="~/Scripts/jquery-ui.js"></script>
     <script src="~/Scripts/sweetalert.min.js"></script>
    
     @RenderSection("scripts", required: false)
