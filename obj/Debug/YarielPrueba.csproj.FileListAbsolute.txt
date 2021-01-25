@@ -56,7 +56,10 @@ C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\EntityFramework.SqlSer
 C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\Microsoft.Web.Infrastructure.dll
 C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\Newtonsoft.Json.dll
+C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\System.Net.Http.Formatting.dll
 C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\System.Web.Helpers.dll
+C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\System.Web.Http.dll
+C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\System.Web.Http.WebHost.dll
 C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\System.Web.Mvc.dll
 C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\System.Web.Optimization.dll
 C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\System.Web.Razor.dll
@@ -66,6 +69,9 @@ C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\System.Web.WebPages.Ra
 C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\WebGrease.dll
 C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\EntityFramework.xml
 C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\EntityFramework.SqlServer.xml
+C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\System.Net.Http.Formatting.xml
+C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\System.Web.Http.xml
+C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\System.Web.Http.WebHost.xml
 C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\System.Web.Helpers.xml
 C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\System.Web.Mvc.xml
 C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\bin\System.Web.Optimization.xml
@@ -80,3 +86,4 @@ C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\obj\Debug\YarielPrueba.csp
 C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\obj\Debug\YarielPrueba.csproj.CopyComplete
 C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\obj\Debug\YarielPrueba.dll
 C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\obj\Debug\YarielPrueba.pdb
+C:\Users\Admin\source\repos\YarielPrueba\YarielPrueba\obj\Debug\YarielPrueba.csprojAssemblyReference.cache

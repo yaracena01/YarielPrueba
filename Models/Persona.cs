@@ -11,20 +11,11 @@ namespace YarielPrueba.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Persona
     {
         public int ID { get; set; }
-        [DisplayName("*Nombre")]
-        [Required(ErrorMessage ="Este campo es requerido")]      
         public string Nombre { get; set; }
-        [DisplayName("*Fecha de Nacimiento")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        [Required(ErrorMessage = "Este campo es requerido")]
-        public DateTime FechaDeNacimiento { get; set; }
-
-
+        public System.DateTime FechaDeNacimiento { get; set; }
     }
 }

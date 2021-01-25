@@ -26,5 +26,8 @@ namespace YarielPrueba.Models
         }
     
         public virtual DbSet<Persona> Persona { get; set; }
+        public virtual DbSet<clients> clients { get; set; }
+        public virtual DbSet<services> services { get; set; }
+        public virtual DbSet<services_detail> services_detail { get; set; }
     }
 }

@@ -6,7 +6,11 @@
     <edmx:Diagrams>
       <Diagram DiagramId="14ab95dac7844f3baf35de0d3c27a166" Name="Diagram1">
         <EntityTypeShape EntityType="YarielPruebaModel.Persona" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-      </Diagram>
+        <EntityTypeShape EntityType="YarielPruebaModel.clients" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="YarielPruebaModel.services" Width="1.5" PointX="3.75" PointY="1" />
+        <EntityTypeShape EntityType="YarielPruebaModel.services_detail" Width="1.5" PointX="6" PointY="1.25" />
+        <AssociationConnector Association="YarielPruebaModel.FK_services_detail_services" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

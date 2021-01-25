@@ -10,5 +10,65 @@
   </EntityType>
   <EntityContainer Name="DBModel" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Persona" EntityType="Self.Persona" />
+    <EntitySet Name="clients" EntityType="YarielPruebaModel.clients" />
+    <EntitySet Name="services" EntityType="YarielPruebaModel.services" />
+    <EntitySet Name="services_detail" EntityType="YarielPruebaModel.services_detail" />
+    <AssociationSet Name="FK_services_detail_services" Association="YarielPruebaModel.FK_services_detail_services">
+      <End Role="services" EntitySet="services" />
+      <End Role="services_detail" EntitySet="services_detail" />
+    </AssociationSet>
   </EntityContainer>
+  <EntityType Name="clients">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="first_name" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Name="last_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="suffix" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="mi" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="username" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Name="password" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Name="address" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="city" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="state" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="zip" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="phone" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="services">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="description" Type="String" Nullable="false" MaxLength="2000" FixedLength="false" Unicode="false" />
+    <Property Name="url" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="urlName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="photo" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="type_services" Type="Int32" />
+    <NavigationProperty Name="services_detail" Relationship="YarielPruebaModel.FK_services_detail_services" FromRole="services" ToRole="services_detail" />
+  </EntityType>
+  <EntityType Name="services_detail">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="id_services" Type="Int32" Nullable="false" />
+    <Property Name="ServicesId" Type="Int32" />
+    <NavigationProperty Name="services" Relationship="YarielPruebaModel.FK_services_detail_services" FromRole="services_detail" ToRole="services" />
+  </EntityType>
+  <Association Name="FK_services_detail_services">
+    <End Type="YarielPruebaModel.services" Role="services" Multiplicity="1" />
+    <End Type="YarielPruebaModel.services_detail" Role="services_detail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="services">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="services_detail">
+        <PropertyRef Name="id_services" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

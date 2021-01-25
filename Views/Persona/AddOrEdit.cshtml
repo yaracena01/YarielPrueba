@@ -5,7 +5,7 @@
 
 <!DOCTYPE html>
 
-@using (Html.BeginForm("AddOrEdit", "Persona", FormMethod.Post, new { autocomplete = "off", onsubmit = "return SubmitForm(this)", id= "form-persona" }))
+@using (Html.BeginForm("AddOrEdit", "Persona", FormMethod.Post, new { autocomplete = "off", onsubmit = "return SubmitForm(this)", id = "form-persona" }))
 {
     @Html.HiddenFor(Model => Model.ID)
     <div class="form-group">
@@ -16,24 +16,32 @@
     <div class="form-group">
         @Html.LabelFor(Model => Model.FechaDeNacimiento, new { @class = "control-label" })
         <div class='input-group date' id='datepicker'>
-            @Html.EditorFor(Model => Model.FechaDeNacimiento, new { htmlAttributes = new { @class = "form-control", id = "datepicker", placeholder="Introduce una fecha" } })
+            @Html.EditorFor(Model => Model.FechaDeNacimiento, new { htmlAttributes = new { @class = "form-control", id = "datepicker", placeholder = "Introduce una fecha" } })
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
             </span>
         </div>
         @Html.ValidationMessageFor(Model => Model.FechaDeNacimiento)
     </div>
+    <div class="form-group">
+        <select class="js-example-basic-single" name="state">
+            <option value="AL">Alabama</option>
+            ...
+            <option value="WY">Wyoming</option>
+        </select>
+    </div>
     <div class="modal-footer">
         <button type="submit" title="Guardar persona" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
-        <button id="clear" type="button" title="Limpiar Campos" class="btn" ><i class="fa fa-eraser" aria-hidden="true"></i></button>
+        <button id="clear" type="button" title="Limpiar Campos" class="btn"><i class="fa fa-eraser" aria-hidden="true"></i></button>
     </div>
 }
 
 <script>
-    $(function () {  
+    $(function () {
         $('#datepicker').datetimepicker({
             format: 'DD/MM/YYYY'
         });
+        $('.js-example-basic-single').select2();
     });
     $('#clear').on("click", function () {
         $("[name='Nombre']").val('');

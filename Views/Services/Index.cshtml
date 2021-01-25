@@ -1,0 +1,336 @@
+﻿
+@using (Html.BeginForm("Index", "Services", FormMethod.Post, new { onsubmit = "return DeleteMultiple(this)" }))
+{
+    <div class="table-title">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2>CRUD <b>services</b></h2>
+            </div>
+            <div class="col-sm-6">
+                <a class="btn btn-success btn-add" onclick="PopupForm('@Url.Action("AddOrEdit", "services")')"><i class="fa fa-plus-circle" aria-hidden="true"></i><span class="mb-hide">Add new service</span></a>
+                <button type="submit" value="Eliminar múltiples" style="margin-right:10px;font-size: 14.9px;" class="btn btn-sm btn-danger btn-add"><i class="fa fa-minus-circle" aria-hidden="true"></i><span class="mb-hide">Delete multiple</span></button>
+            </div>
+        </div>
+    </div>
+    <table id="servicesTable" class="table-style table table-striped table-hover" style="width:100%">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="checkBoxAll" class="custom-checkbox" /></th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Photo</th>
+                <th>Url name</th>
+                @*<th>Url</th>*@
+                <th>Actions</th>
+            </tr>
+        </thead>
+    </table>
+}
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" style="opacity: 1;color: #fff;" title="Cerrar ventana" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <p>Some text in the modal.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="imageModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" style="opacity: 1;color: #fff;" title="Cerrar ventana" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="title-image modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <img scr="" style="width:100%" class="add-image" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="textModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" style="opacity: 1;color: #fff;" title="Cerrar ventana" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="title-text modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <p class="add-text"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+
+
+    <script>
+        var dataTable, numbers = "0123456789";
+
+        //inicio - implementacion de datatable
+        $(document).ready(function () {
+           dataTable = $("#servicesTable").DataTable({
+                "ajax": {
+                    "url": "/Services/GetData",
+                    "type": "GET",
+                    "datatype": "json"
+               },
+               buttons: [
+                   'selectAll',
+                   'selectNone'
+               ],
+               //inicio - definiendo las columnas de la tabla
+               "columns": [
+                    {
+                        "data": "id", "width": "50px", "render": function (data) {
+                            return '<input type="checkbox" class="chkCheckBoxId" name="ID" value="'+data+'">';
+                        },
+                        "orderable": false,
+                        "width" : "50px"
+                    },
+                   { "data": "name", "autoWidth": true },
+                   { "data": "description", "autoWidth": true },
+                   {
+                       "data": "photo", "autoWidth": true
+                   },
+                   { "data": "urlName", "width": "160px" },
+                   //{ "data": "url", "autoWidth": true },
+                   {
+                       "data": "id", "width": "50px", "className": 'dt-body-center', "render": function (data) {
+                           return "<a class='btn btn-warning btn-sm' title='Editar' onclick=PopupForm('@Url.Action("AddOrEdit","services")/" + data + "')><i class='fa fa-pencil' aria-hidden='true'></i></a> <a title='Eliminar' onclick='Delete(" + data + ")' class='action-delete btn btn-danger btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></a>";
+                       },
+                       "orderable": false,
+                       "width" : "140px"
+                   }
+
+               ],
+               "columnDefs": [{
+                   "targets": 3,
+                   "orderable": false,
+                   "render": function (data, type, row, meta) {
+
+                       return "<a class='icon-image' data-image='" + row.photo + "' data-title='" + row.name +"' onclick=openImage(this); ><i class='fa fa-picture-o' style='font-size:26px; cursor:pointer' aria-hidden='true'></i></a>";
+                   },
+               },
+                   {
+                       "targets": 2,
+                       "orderable": false,
+                       "render": function (data, type, row, meta) {
+
+                           if (row.description.length > 100) {
+                               return '<a style="cursor:pointer" data-description="' + row.description + '" data-title="' + row.name +'" onclick=openText(this)>' + row.description.substring(0,100) + ' (...)</a>';
+                           } else {
+                               return row.description;
+                           }
+                          
+                       }
+                   }],
+               //fin - definiendo las columnas de la tabla
+               "order": [[1, "asc"]],
+               "lengthMenu": [5, 10, 25, 50, 75, 100],
+               //inicio - traduccion de los texto del datatable
+               //"oLanguage": {
+               //    "sLengthMenu": "Mostrar _MENU_ registros",
+               //    "sEmptyTable": "No hay datos disponibles en la tabla",
+               //    "sInfo": "Mostrando _START_ to _END_ of _TOTAL_ registros",
+               //    "sInfoEmpty": "Mostrando 0 to 0 of 0 registros",
+               //    "oPaginate": {
+               //        "sFirst": "Primero",
+               //        "sLast": "Último",
+               //        "sNext": "Siguiente",
+               //        "sPrevious": "Anterior"
+               //    },
+               //}
+               //fin - traduccion de los texto del datatable
+           });
+            $('#checkBoxAll').click(function () {
+                if ($(this).is(":checked")) {
+                    $(".chkCheckBoxId").prop("checked", true)
+                }
+                else {
+                    $(".chkCheckBoxId").prop("checked", false)
+                }
+            });
+        });
+        //fin - implementacion de datatable
+
+        function hasNumber(texto) {
+            for (i = 0; i < texto.length; i++) {
+                if (numbers.indexOf(texto.charAt(i), 0) != -1) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        //inicio - funcion para dibujar formulario dentro en un modal
+        function PopupForm(url) {
+            var title = hasNumber(url) ? "Editar services" : "Agregar services";
+            $.get(url)
+                .done(function (response) {
+                    $('#myModal .modal-title').html(title);
+                    $('#myModal .modal-body').html(response);
+                    $('#myModal').modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    $("#myModal").on('shown.bs.modal', function () {
+                        $(this).find('#Nombre').focus();
+                    });
+                });
+        }
+        //fin - funcion para dibujar formulario dentro en un modal
+
+        function openImage (image, title) {
+            //console.log($(image).data('image'), title);
+            var root = "/imageServices/" + $(image).data('image');
+            var titleImage = $(image).data('title');
+
+            $('.add-image').attr("src", root);
+            $('.title-image').text(titleImage);
+            $('#imageModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+        }
+        function openText(text, title) {
+            //console.log($(image).data('image'), title);
+            console.log($(text).data('description'));
+            var root = $(text).data('description');
+            var titleImage = $(text).data('title');
+
+            $('.add-text').text(root);
+            $('.title-text').text(titleImage);
+            $('#textModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+        }
+
+        //inicio - funcion para validar y guardar los datos del formulario
+        function SubmitForm(form) {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            $('#myModal').modal('toggle');
+                            dataTable.ajax.reload(null, false);
+                            toastr.success(data.message, '', {
+                                "positionClass": "toast-bottom-right",
+                                "showDuration": "1000",
+                                "hideDuration": "1000",
+                                "timeOut": "5000",
+                                "extendedTimeOut": "1000",
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
+                            });
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+        //inicio - funcion para validar y guardar los datos del formulario
+
+        //inicio - funcion para eliminar multiples registros de la tabla
+        //function DeleteMultiple(form) {
+        //    if ($(".chkCheckBoxId").is(":checked")) {
+        //        swal({
+        //            title: "Eliminar múltiples",
+        //            text: "¿Esta seguro de realizar esta acción?",
+        //            icon: "warning",
+        //            buttons: true,
+        //            dangerMode: true,
+        //        }).then((willDelete) => {
+        //            if (willDelete) {
+        //                $.ajax({
+        //                    type: "POST",
+        //                    url: form.action,
+        //                    data: $(form).serialize(),
+        //                    success: function (data) {
+        //                        if (data.success) {
+        //                            $("#checkBoxAll").prop("checked", false);
+        //                            dataTable.ajax.reload(null, false);
+        //                            toastr.error(data.message, '', {
+        //                                "positionClass": "toast-bottom-right",
+        //                                "showDuration": "1000",
+        //                                "hideDuration": "1000",
+        //                                "timeOut": "5000",
+        //                                "extendedTimeOut": "1000",
+        //                                "showEasing": "swing",
+        //                                "hideEasing": "linear",
+        //                                "showMethod": "fadeIn",
+        //                                "hideMethod": "fadeOut"
+        //                            });
+        //                        } else {
+        //                            swal({
+        //                                title: "Alerta",
+        //                                text: "Debe seleccionar un registro",
+        //                                icon: "warning",
+        //                                dangerMode: true
+        //                            });
+        //                        }
+        //                    }
+        //                });
+        //            }
+        //        });
+        //    } else {
+        //        swal({
+        //            title: "Alerta",
+        //            text: "Debe seleccionar un registro",
+        //            icon: "warning",
+        //            dangerMode: true
+        //        });
+        //    }
+        //    return false;
+        //}
+         //fin - funcion para eliminar multiples registros de la tabla
+
+        @*function Delete(id) {
+            swal({
+                title: "Eliminar",
+                text: "¿Esta seguro de realizar esta acción?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                         type: "POST",
+                         url: '@Url.Action("Delete","Services")/' + id,
+                         success: function (data) {
+                             if (data.success) {
+                                 dataTable.ajax.reload(null, false);
+                                 toastr.error(data.message, '', {
+                                     "positionClass": "toast-bottom-right",
+                                     "showDuration": "1000",
+                                     "hideDuration": "1000",
+                                     "timeOut": "5000",
+                                     "extendedTimeOut": "1000",
+                                     "showEasing": "swing",
+                                     "hideEasing": "linear",
+                                     "showMethod": "fadeIn",
+                                     "hideMethod": "fadeOut"
+                                 });
+                             }
+                         }
+                      });
+                }
+            });
+        }*@
+
+    </script>
+}

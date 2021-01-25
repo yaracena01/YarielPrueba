@@ -14,7 +14,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>YarielPrueba</RootNamespace>
     <AssemblyName>YarielPrueba</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,18 +55,25 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.7\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
@@ -110,6 +118,7 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
@@ -128,10 +137,15 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ServicesController.cs" />
     <Compile Include="Controllers\PersonaController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\clients.cs">
+      <DependentUpon>DBModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DBModels.Context.cs">
       <AutoGen>True</AutoGen>
@@ -149,6 +163,12 @@
       <DependentUpon>DBModels.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Persona.cs">
+      <DependentUpon>DBModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\services.cs">
+      <DependentUpon>DBModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\services_detail.cs">
       <DependentUpon>DBModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -181,6 +201,28 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="imageServices\06a22770-3ca8-44de-9753-1284ee6b0286GRAPHIC_DESIGN.png" />
+    <Content Include="imageServices\0a52ca05-dabd-41a2-8cda-16da858d605dlogoCISEP.png" />
+    <Content Include="imageServices\0f100f79-eaba-4854-9808-e92a9d2d1094contaxes.png" />
+    <Content Include="imageServices\3784efb9-445e-4d9d-87da-011fa4e4ba78logoCISEP.png" />
+    <Content Include="imageServices\61f60e7f-0e8b-457c-89a6-705a6f6f1bb1Camera_Security.png" />
+    <Content Include="imageServices\78092546-ee2e-4af6-89e4-51d0dd593952Foto2.png" />
+    <Content Include="imageServices\8f9f4547-a090-4cbf-a449-9a114f52dbbcNotary_Public.png" />
+    <Content Include="imageServices\a71281f2-0a20-4e0d-b098-d4969a121b56vehicle_title.png" />
+    <Content Include="imageServices\b5271c3b-3ccc-4e87-acf1-cb1a639b7c9fMEDICAL BILLS.png" />
+    <Content Include="imageServices\bb32b0aa-b440-4a10-b840-4bb5e7b9c185HomeHeader1.png" />
+    <Content Include="imageServices\cbcf333f-975c-45dd-9a08-757f02cb589eBANKRUPTCIES.png" />
+    <Content Include="imageServices\d1f11792-fd94-468b-ab6e-4b27160bb4b2FOTO%40.png" />
+    <Content Include="imageServices\d5514ce2-41d3-4551-b7d4-55f4525d4b2e6db99719-901f-42b4-8dec-875eb5de08becredito.png" />
+    <Content Include="imageServices\d6f40182-6036-44df-b84e-e26918cfb7ecHomeheader.png" />
+    <Content Include="imageServices\dd2b37b1-e0c1-4ee4-814d-86c53afb4fa0webstite.png" />
+    <Content Include="imageServices\e04cbb38-a3f0-4795-8834-e6e97a5734c8corporacionesServices.png" />
+    <Content Include="imageServices\e08c4acb-88a6-40ae-9fb0-fa1a7f58a7b0IDENTITY THEFT.png" />
+    <Content Include="imageServices\e651aa4f-ed2b-4410-9312-522bcbc38688DEBT SETTLEMENT.png" />
+    <Content Include="imageServices\f0352d41-997a-41d6-ab04-d8ade18c861bIMMIGRATION_FORM.png" />
+    <Content Include="imageServices\f41e0868-7f08-4060-860e-d8d0fdaec771LATE PAYMENTS.png" />
+    <Content Include="imageServices\fe15c018-bcb7-4b35-88a6-b475d3cf22bdinformation_tecnology.png" />
+    <Content Include="imageServices\fe8f99f6-a19d-4cfa-a5a8-a24601876e33HomeHeader2.png" />
     <Content Include="Models\DBModels.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DBModels.Context.cs</LastGenOutput>
@@ -234,11 +276,13 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\main.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\moment-with-locales.js" />
     <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\sweetalert.min.js" />
     <Content Include="Scripts\toastr.min.js" />
     <Content Include="Web.config" />
@@ -272,6 +316,8 @@
     <Content Include="webfonts\fa-brands-400.woff" />
     <Content Include="webfonts\fa-brands-400.ttf" />
     <Content Include="webfonts\fa-brands-400.eot" />
+    <Content Include="Views\Services\Index.cshtml" />
+    <Content Include="Views\Services\AddOrEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

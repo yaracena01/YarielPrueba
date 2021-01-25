@@ -1,5 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="YarielPruebaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="clients">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="first_name" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="last_name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="suffix" Type="varchar" MaxLength="15" />
+    <Property Name="mi" Type="char" MaxLength="1" />
+    <Property Name="email" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="username" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="password" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="address" Type="varchar" MaxLength="500" Nullable="false" />
+    <Property Name="city" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="state" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="zip" Type="varchar" MaxLength="5" Nullable="false" />
+    <Property Name="phone" Type="varchar" MaxLength="15" Nullable="false" />
+  </EntityType>
   <EntityType Name="Persona">
     <Key>
       <PropertyRef Name="ID" />
@@ -8,7 +26,47 @@
     <Property Name="Nombre" Type="varchar" MaxLength="25" Nullable="false" />
     <Property Name="FechaDeNacimiento" Type="date" Nullable="false" />
   </EntityType>
+  <EntityType Name="services">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="description" Type="varchar" MaxLength="2000" Nullable="false" />
+    <Property Name="url" Type="varchar" MaxLength="200" />
+    <Property Name="urlName" Type="varchar" MaxLength="200" />
+    <Property Name="photo" Type="varchar" MaxLength="255" />
+    <Property Name="type_services" Type="int" />
+  </EntityType>
+  <EntityType Name="services_detail">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="id_services" Type="int" Nullable="false" />
+    <Property Name="ServicesId" Type="int" />
+  </EntityType>
+  <Association Name="FK_services_detail_services">
+    <End Role="services" Type="Self.services" Multiplicity="1" />
+    <End Role="services_detail" Type="Self.services_detail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="services">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="services_detail">
+        <PropertyRef Name="id_services" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="YarielPruebaModelStoreContainer">
+    <EntitySet Name="clients" EntityType="Self.clients" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Persona" EntityType="Self.Persona" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="services" EntityType="Self.services" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="services_detail" EntityType="Self.services_detail" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_services_detail_services" Association="Self.FK_services_detail_services">
+      <End Role="services" EntitySet="services" />
+      <End Role="services_detail" EntitySet="services_detail" />
+    </AssociationSet>
   </EntityContainer>
 </Schema>
